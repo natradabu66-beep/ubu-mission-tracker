@@ -162,7 +162,7 @@
                     <div class="flex flex-wrap items-center gap-2">
                         <!-- Cloud Sync Status Pill & Manual Refresh -->
                         <div class="flex items-center gap-1.5 bg-white/10 border border-white/20 px-2.5 py-1.5 rounded-xl">
-                            <span id="cloudSyncIndicator" class="inline-flex items-center gap-1 text-[11px] font-display font-medium text-amber-300">
+                            <span id="cloudSyncIndicator" onclick="switchMainMenu('06')" title="คลิกเพื่อดูรายละเอียดการเชื่อมต่อ Google Sheets" class="inline-flex items-center gap-1 text-[11px] font-display font-medium text-amber-300 cursor-pointer hover:underline">
                                 <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
                                 <span id="cloudSyncText">กำลังตรวจสอบการเชื่อมต่อ...</span>
                             </span>
@@ -1032,7 +1032,7 @@
         // =====================================================================
         // 1. CONSTANTS & 5 MAIN DIVISIONS (งานมาตรฐานและพัฒนาหลักสูตร)
         // =====================================================================
-        const GAS_WEB_APP_URL = 'https://script.google.com/a/macros/ubu.ac.th/s/AKfycbzU9Lt54kLldImQEyGaVigM8uPwMpmHJstc0m5OjRie1vGPND8M2XgexaFu3VZV6_BF/exec';
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzU9Lt54kLldImQEyGaVigM8uPwMpmHJstc0m5OjRie1vGPND8M2XgexaFu3VZV6_BF/exec';
         const STORAGE_KEY = 'ubu_mission_tracker_system_v2';
         const SESSION_KEY = 'ubu_mission_tracker_session_v2';
         const ADMIN_EMAIL = 'natrada.bu.66@ubu.ac.th';
@@ -1118,122 +1118,7 @@
         function getInitialDefaultState() {
             const today = getTodayISO();
             const tomorrow = addDaysISO(today, 1);
-            const nextWeek = addDaysISO(today, 5);
-            const lastWeek = addDaysISO(today, -6);
-
-            return {
-                staff: [
-                    { id: 'stf-admin', name: 'ผู้ดูแลระบบ (Admin)', divisionId: 'div-1', position: 'ผู้ดูแลระบบงานมาตรฐานและพัฒนาหลักสูตร', email: ADMIN_EMAIL, ext: '3120', pin: '1234' },
-                    { id: 'stf-1', name: 'นางสาวเกศสุดา จันทร์ดี (พี่เกศ)', divisionId: 'div-1', position: 'หัวหน้างานมาตรฐานและพัฒนาหลักสูตร', email: 'ketsuda.j@ubu.ac.th', ext: '3121', pin: '1234' },
-                    { id: 'stf-2', name: 'นางนุชนาถ ศรีสุวรรณ (พี่สาว)', divisionId: 'div-1', position: 'นักวิชาการศึกษาชำนาญการ', email: 'nuchanart.s@ubu.ac.th', ext: '3122', pin: '1234' },
-                    { id: 'stf-3', name: 'นายธนากร วงศ์สุวรรณ (พี่ก้อง)', divisionId: 'div-2', position: 'นักวิชาการศึกษา', email: 'thanakorn.w@ubu.ac.th', ext: '3123', pin: '1234' },
-                    { id: 'stf-4', name: 'นางสาวปิยะธิดา แก้วมณี (พี่ปิยะ)', divisionId: 'div-2', position: 'นักวิชาการศึกษา', email: 'piyathida.k@ubu.ac.th', ext: '3124', pin: '1234' },
-                    { id: 'stf-5', name: 'นางสาววราภรณ์ บุญมี (พี่ปลา)', divisionId: 'div-3', position: 'นักวิเคราะห์นโยบายและแผน', email: 'waraporn.b@ubu.ac.th', ext: '3125', pin: '1234' },
-                    { id: 'stf-6', name: 'นายกิตติพงษ์ ทองดี (พี่กิต)', divisionId: 'div-3', position: 'นักวิชาการศึกษา', email: 'kittipong.t@ubu.ac.th', ext: '3126', pin: '1234' },
-                    { id: 'stf-7', name: 'นางสาวสุภาพร ใจดี (พี่สุ)', divisionId: 'div-4', position: 'นักวิชาการคอมพิวเตอร์', email: 'supaporn.j@ubu.ac.th', ext: '3127', pin: '1234' },
-                    { id: 'stf-8', name: 'นายชัชวาลย์ พรมมา (พี่ชัช)', divisionId: 'div-4', position: 'นักวิชาการศึกษา', email: 'chatchawan.p@ubu.ac.th', ext: '3128', pin: '1234' },
-                    { id: 'stf-9', name: 'นางสาวณัฐรดา บุญเจริญ (พี่นัท)', divisionId: 'div-5', position: 'นักวิชาการศึกษา', email: 'natrada.b@ubu.ac.th', ext: '3129', pin: '1234' },
-                    { id: 'stf-10', name: 'นางสาวกัญญารัตน์ ภูมิภาค (พี่กัญ)', divisionId: 'div-5', position: 'เจ้าหน้าที่บริหารงานทั่วไป', email: 'kanyarat.p@ubu.ac.th', ext: '3130', pin: '1234' }
-                ],
-                taskTypes: [
-                    { id: 'office', label: 'อยู่สำนักงาน', emoji: '🟢', color: 'emerald' },
-                    { id: 'meeting', label: 'ติดประชุม / อบรม', emoji: '🟡', color: 'amber' },
-                    { id: 'offsite', label: 'ไปราชการ / นอกสถานที่', emoji: '🔵', color: 'sky' },
-                    { id: 'leave', label: 'ลา (กิจ/ป่วย/พักผ่อน)', emoji: '🔴', color: 'rose' },
-                    { id: 'other', label: 'ธุระอื่นๆ', emoji: '🟣', color: 'purple' }
-                ],
-                duties: [
-                    {
-                        id: 'duty-1',
-                        staffId: 'stf-1',
-                        type: 'meeting',
-                        title: 'ประชุมหารือเกณฑ์มาตรฐานหลักสูตรระดับบัณฑิตศึกษา',
-                        location: 'ห้องประชุมกองวิชาการ ชั้น 2',
-                        startDate: today,
-                        endDate: today,
-                        startTime: '09:00',
-                        endTime: '12:00',
-                        delegate: 'ติดต่อพี่สาว โทร 3122 แทนได้ค่ะ',
-                        otherDetail: ''
-                    },
-                    {
-                        id: 'duty-2',
-                        staffId: 'stf-3',
-                        type: 'offsite',
-                        title: 'ลงพื้นที่ให้คำปรึกษาการปรับปรุงหลักสูตร คณะวิศวกรรมศาสตร์',
-                        location: 'คณะวิศวกรรมศาสตร์ ม.อุบลฯ',
-                        startDate: today,
-                        endDate: tomorrow,
-                        startTime: '08:30',
-                        endTime: '16:30',
-                        delegate: 'ประสานงานผ่านพี่ปิยะ โทร 3124',
-                        otherDetail: ''
-                    },
-                    {
-                        id: 'duty-3',
-                        staffId: 'stf-7',
-                        type: 'office',
-                        title: 'อัปเดตฐานข้อมูลหลักสูตรในระบบ CHECO และเว็บไซต์กองวิชาการ',
-                        location: 'สำนักงานกองวิชาการ',
-                        startDate: today,
-                        endDate: today,
-                        startTime: '08:30',
-                        endTime: '16:30',
-                        delegate: '',
-                        otherDetail: ''
-                    }
-                ],
-                meetings: [
-                    {
-                        id: 'mtg-1',
-                        title: 'ประชุมคณะกรรมการกลั่นกรองหลักสูตร มหาวิทยาลัยอุบลราชธานี ครั้งที่ 4/2569',
-                        divisionId: 'div-5',
-                        date: nextWeek,
-                        startTime: '09:00',
-                        endTime: '12:00',
-                        location: 'ห้องประชุมพิบูลมังสาหาร ชั้น 3 สำนักงานอธิการบดี',
-                        participantIds: ['stf-1', 'stf-2', 'stf-3', 'stf-9', 'stf-10'],
-                        sentReminders: ['14d'],
-                        photos: []
-                    },
-                    {
-                        id: 'mtg-2',
-                        title: 'ประชุมเชิงปฏิบัติการทบทวนตัวชี้วัด AUN-QA ระดับหลักสูตร',
-                        divisionId: 'div-3',
-                        date: lastWeek,
-                        startTime: '13:00',
-                        endTime: '16:30',
-                        location: 'ห้องประชุมกองวิชาการ ชั้น 2',
-                        participantIds: ['stf-1', 'stf-5', 'stf-6', 'stf-7'],
-                        sentReminders: ['14d', '7d', '4d', '1d'],
-                        photos: []
-                    }
-                ],
-                logs: [
-                    { id: 'log-1', message: 'เริ่มต้นใช้งานระบบติดตามและแจ้งเตือนภารกิจ งานมาตรฐานและพัฒนาหลักสูตร', time: formatThaiDateShort(today) + ' 08:30', unread: true }
-                ]
-            };
-        }
-
-        function ensureStateIntegrity() {
-            const def = getInitialDefaultState();
-            if (!Array.isArray(state.staff) || state.staff.length === 0) state.staff = def.staff;
-            if (!Array.isArray(state.taskTypes) || state.taskTypes.length === 0) state.taskTypes = def.taskTypes;
-            if (!Array.isArray(state.duties)) state.duties = def.duties;
-            if (!Array.isArray(state.meetings)) state.meetings = def.meetings;
-            if (!Array.isArray(state.logs)) state.logs = def.logs;
-
-            if (!state.staff.some(s => isAdminAccount(s))) {
-                state.staff.unshift(def.staff[0]);
-            }
-            state.meetings.forEach(m => {
-                if (!Array.isArray(m.photos)) m.photos = [];
-                if (!Array.isArray(m.sentReminders)) m.sentReminders = [];
-                if (!Array.isArray(m.participantIds)) m.participantIds = [];
-            });
-        }
-
-        function setCloudSyncStatus(statusType, text) {
+        function setCloudSyncStatus(statusType, text, detailReason = '') {
             const indicator = document.getElementById('cloudSyncIndicator');
             const label = document.getElementById('cloudSyncText');
             const btn = document.getElementById('btnManualSync');
@@ -1242,17 +1127,132 @@
 
             label.textContent = text;
             if (diag) {
-                diag.textContent = `สถานะล่าสุด: ${text} (${new Date().toLocaleTimeString('th-TH')}) | URL: ${GAS_WEB_APP_URL}`;
+                diag.innerHTML = `<strong>สถานะล่าสุด:</strong> ${escapeHtml(text)} (${new Date().toLocaleTimeString('th-TH')})<br><strong>Endpoint:</strong> ${escapeHtml(activeGasEndpoint)}${detailReason ? `<br><span class="text-rose-600 font-semibold">สาเหตุ: ${escapeHtml(detailReason)}</span>` : ''}`;
             }
             if (statusType === 'syncing') {
-                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-amber-300';
+                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-amber-300 cursor-pointer hover:underline';
                 if (btn) btn.classList.add('animate-spin');
             } else if (statusType === 'error') {
-                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-rose-300';
+                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-rose-300 cursor-pointer hover:underline';
                 if (btn) btn.classList.remove('animate-spin');
             } else {
-                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-emerald-300';
+                indicator.className = 'inline-flex items-center gap-1 text-[11px] font-display font-medium text-emerald-300 cursor-pointer hover:underline';
                 if (btn) btn.classList.remove('animate-spin');
+            }
+        }
+
+        function loadLocalCacheState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    state = JSON.parse(raw);
+                } else {
+                    state = getInitialDefaultState();
+                }
+            } catch (e) {
+                state = getInitialDefaultState();
+            }
+            ensureStateIntegrity();
+            updateNotifBadge();
+        }
+
+        async function fetchGasJsonWithFallback(queryParams) {
+            const endpoints = [GAS_WEB_APP_URL, GAS_PUBLIC_FALLBACK_URL];
+            let lastError = null;
+            for (const baseUrl of endpoints) {
+                try {
+                    const res = await fetch(`${baseUrl}${queryParams}`, {
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: 'omit',
+                        redirect: 'follow'
+                    });
+                    const rawText = await res.text();
+                    if (rawText.trim().startsWith('<')) {
+                        throw new Error('Google ส่งกลับเป็นหน้า HTML ล็อกอิน (ยังไม่ได้ตั้งค่า Who has access เป็น "Anyone / ทุกคน")');
+                    }
+                    const json = JSON.parse(rawText);
+                    activeGasEndpoint = baseUrl;
+                    return json;
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+            throw lastError || new Error('ไม่สามารถเชื่อมต่อ Google Apps Script ได้');
+        }
+
+        async function loadStateFromCloud(showNotification = false) {
+            setCloudSyncStatus('syncing', 'กำลังซิงก์ Google Sheets...');
+            try {
+                const json = await fetchGasJsonWithFallback(`?action=getState&t=${Date.now()}`);
+                if (json && json.status === 'success' && json.data) {
+                    const cloudData = json.data;
+                    const hasCloudStaff = Array.isArray(cloudData.staff) && cloudData.staff.length > 0;
+                    if (!hasCloudStaff) {
+                        state = getInitialDefaultState();
+                        ensureStateIntegrity();
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                        await pushStateToGoogleSheets();
+                        if (showNotification) showToast('สร้างข้อมูลเริ่มต้นบน Google Sheets เรียบร้อยแล้ว');
+                    } else {
+                        state = {
+                            staff: cloudData.staff || [],
+                            duties: cloudData.duties || [],
+                            meetings: cloudData.meetings || [],
+                            taskTypes: (cloudData.taskTypes && cloudData.taskTypes.length > 0) ? cloudData.taskTypes : getInitialDefaultState().taskTypes,
+                            logs: cloudData.logs || []
+                        };
+                        ensureStateIntegrity();
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                        if (showNotification) showToast('ดึงข้อมูลล่าสุดจาก Google Sheets เรียบร้อยแล้ว');
+                    }
+                    setCloudSyncStatus('synced', 'ซิงก์ Google Sheets แล้ว ✓');
+                    refreshActiveView();
+                } else {
+                    throw new Error(json?.message || 'รูปแบบข้อมูลตอบกลับไม่ถูกต้อง');
+                }
+            } catch (err) {
+                console.warn('Cloud sync fallback to local cache:', err);
+                const reason = err?.message || 'ติดสิทธิ์ CORS หรือการตั้งค่า Deploy';
+                setCloudSyncStatus('error', 'โหมดออฟไลน์ (คลิกดูสาเหตุ)', reason);
+                if (showNotification) {
+                    showToast(`ซิงก์ไม่สำเร็จ: ${reason}`, true);
+                }
+            }
+        }
+
+        function syncFromGoogleSheets(manual = false) {
+            return loadStateFromCloud(manual);
+        }
+
+        async function pushStateToGoogleSheets() {
+            setCloudSyncStatus('syncing', 'กำลังบันทึกขึ้น Google Sheets...');
+            try {
+                const payload = JSON.stringify({
+                    action: 'saveState',
+                    state: state
+                });
+                const res = await fetch(activeGasEndpoint, {
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: payload
+                });
+                const rawText = await res.text();
+                if (rawText.trim().startsWith('<')) {
+                    throw new Error('ติดหน้าล็อกอิน Google (กรุณาตั้งค่า Who has access เป็น Anyone)');
+                }
+                const json = JSON.parse(rawText);
+                if (json && json.status === 'success') {
+                    setCloudSyncStatus('synced', 'ซิงก์ Google Sheets แล้ว ✓');
+                } else {
+                    throw new Error(json?.message || 'Save failed');
+                }
+            } catch (err) {
+                console.warn('Push to Google Sheets error:', err);
+                setCloudSyncStatus('error', 'รอซิงก์ขึ้น Google Sheets', err?.message || '');
             }
         }
 
